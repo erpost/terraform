@@ -75,5 +75,12 @@ resource "aws_security_group" "allow_https" {
   }
 }
 # Create Internet Gateway
+resource "aws_internet_gateway" "igw" {
+  vpc_id = aws_vpc.vpc_terraform.id
 
+  tags = {
+    Group = "ICO"
+    Owner = "erpost"
+  }
+}
 # Create Public Route Table
