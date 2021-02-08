@@ -59,7 +59,7 @@ resource "aws_security_group" "allow_https" {
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = [aws_vpc.vpc_terraform.cidr_block, "142.112.43.72/32"]
+    cidr_blocks = [aws_vpc.vpc_terraform.cidr_block, "172.16.0.0/16"]
   }
 
   egress {
