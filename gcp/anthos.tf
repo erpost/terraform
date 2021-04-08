@@ -18,70 +18,70 @@ resource "google_project_service" "compute" {
 resource "google_project_service" "anthos" {
   service = "anthos.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable Anthos GKE API
 resource "google_project_service" "anthosgke" {
   service = "anthosgke.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable Cloud Resource Manager API
 resource "google_project_service" "cloudresourcemanager" {
   service = "cloudresourcemanager.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable Containers API
 resource "google_project_service" "container" {
   service = "container.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable GKE Connect API
 resource "google_project_service" "gkeconnect" {
   service = "gkeconnect.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable GKE Hub API
 resource "google_project_service" "gkehub" {
   service = "gkehub.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable Service Usage API
 resource "google_project_service" "serviceusage" {
   service = "serviceusage.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable Stackdriver API
 resource "google_project_service" "stackdriver" {
   service = "stackdriver.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable Monitoring API
 resource "google_project_service" "monitoring" {
   service = "monitoring.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Enable Logging API
 resource "google_project_service" "logging" {
   service = "logging.googleapis.com"
 
-  disable_dependent_services = true
+  disable_on_destroy = false
 }
 
 # Create Service Account
@@ -166,7 +166,7 @@ resource "google_compute_subnetwork" "vpc_subnet_2" {
   network       = google_compute_network.vpc_network.id
 }
 
-# Create Firewall Rule
+# Create Firewall Rule from Laptop
 resource "google_compute_firewall" "full-access" {
   name     = "full-access"
   network  = google_compute_network.vpc_network.name
@@ -179,12 +179,26 @@ resource "google_compute_firewall" "full-access" {
   source_ranges = [var.ssh_location]
 }
 
+# Create Firewall Rule for Internal VPC Traffic
+resource "google_compute_firewall" "internal-access" {
+  name     = "internal-access"
+  network  = google_compute_network.vpc_network.name
+  priority = 200
+
+  allow {
+    protocol = "all"
+  }
+
+  source_ranges = ["10.0.0.0/8"]
+}
+
 # Create Workstation Instance
 resource "google_compute_instance" "abm-ws" {
   name         = "abm-ws"
-  machine_type = "e2-standard-2"
+  machine_type = "n1-standard-8"
   zone         = "us-central1-a"
   can_ip_forward = true
+  min_cpu_platform = "Intel Haswell"
 
   boot_disk {
     initialize_params {
@@ -215,9 +229,10 @@ resource "google_compute_instance" "abm-ws" {
 # Create Control Plane Node 1
 resource "google_compute_instance" "abm-cp1" {
   name         = "abm-cp1"
-  machine_type = "e2-standard-2"
+  machine_type = "n1-standard-8"
   zone         = "us-central1-a"
   can_ip_forward = true
+  min_cpu_platform = "Intel Haswell"
 
   boot_disk {
     initialize_params {
@@ -248,9 +263,10 @@ resource "google_compute_instance" "abm-cp1" {
 # Create Control Plane Node 2
 resource "google_compute_instance" "abm-cp2" {
   name         = "abm-cp2"
-  machine_type = "e2-standard-2"
+  machine_type = "n1-standard-8"
   zone         = "us-central1-a"
   can_ip_forward = true
+  min_cpu_platform = "Intel Haswell"
 
   boot_disk {
     initialize_params {
@@ -281,9 +297,10 @@ resource "google_compute_instance" "abm-cp2" {
 # Create Control Plane Node 3
 resource "google_compute_instance" "abm-cp3" {
   name         = "abm-cp3"
-  machine_type = "e2-standard-2"
+  machine_type = "n1-standard-8"
   zone         = "us-central1-a"
   can_ip_forward = true
+  min_cpu_platform = "Intel Haswell"
 
   boot_disk {
     initialize_params {
@@ -314,9 +331,10 @@ resource "google_compute_instance" "abm-cp3" {
 # Create Worker Node 1
 resource "google_compute_instance" "abm-w1" {
   name         = "abm-w1"
-  machine_type = "e2-standard-2"
+  machine_type = "n1-standard-8"
   zone         = "us-central1-a"
   can_ip_forward = true
+  min_cpu_platform = "Intel Haswell"
 
   boot_disk {
     initialize_params {
@@ -347,9 +365,10 @@ resource "google_compute_instance" "abm-w1" {
 # Create Worker Node 2
 resource "google_compute_instance" "abm-w2" {
   name         = "abm-w2"
-  machine_type = "e2-standard-2"
+  machine_type = "n1-standard-8"
   zone         = "us-central1-a"
   can_ip_forward = true
+  min_cpu_platform = "Intel Haswell"
 
   boot_disk {
     initialize_params {

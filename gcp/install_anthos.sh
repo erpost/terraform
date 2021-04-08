@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Before running this script ensure you have setup the Cloud Monitoring Workspace manually
+# https://console.cloud.google.com/monitoring"
+
+# Run from local console
+
 # Set Variables
 export PROJECT_ID=$(gcloud config get-value project)
 export ZONE=us-central1-a
@@ -98,7 +103,7 @@ echo "Deploying Anthos"
 gcloud compute ssh root@$VM_WS --zone ${ZONE} << EOF
 set -x
 export PROJECT_ID=$(gcloud config get-value project)
-export clusterid=cluster-baremetal
+export clusterid=cluster-baremtl1
 bmctl create config -c \$clusterid
 cat > bmctl-workspace/\$clusterid/\$clusterid.yaml << EOB
 ---
