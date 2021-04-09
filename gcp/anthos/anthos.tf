@@ -86,7 +86,7 @@ resource "google_project_service" "logging" {
 
 # Create Service Account
 resource "google_service_account" "baremetal-gcr" {
-  account_id   = "baremetal-gcr"
+  account_id   = "baremetal-gcr-id"
   display_name = "baremetal-gcr"
 }
 
@@ -152,7 +152,7 @@ resource "google_compute_network" "vpc_network" {
 
 # Create Subnetwork 1
 resource "google_compute_subnetwork" "vpc_subnet_1" {
-  name          = "subnet-1"
+  name          = "subnet-anthos1"
   ip_cidr_range = "10.1.0.0/16"
   region        = "us-central1"
   network       = google_compute_network.vpc_network.id
@@ -160,7 +160,7 @@ resource "google_compute_subnetwork" "vpc_subnet_1" {
 
 # Create Subnetwork 2
 resource "google_compute_subnetwork" "vpc_subnet_2" {
-  name          = "subnet-2"
+  name          = "subnet-anthos2"
   ip_cidr_range = "10.2.0.0/16"
   region        = "us-east1"
   network       = google_compute_network.vpc_network.id
