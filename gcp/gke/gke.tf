@@ -3,7 +3,7 @@ variable "ssh_location" {
 }
 
 provider "google" {
-  project = "interop2"
+  project = "appinteroperability"
   region  = "us-central1"
 }
 
@@ -56,24 +56,27 @@ resource "google_compute_firewall" "internal-access" {
 }
 
 # Create GKE Cluster
-//resource "google_container_cluster" "cluster-gke1" {
-//  name     = "cluster-gke1"
-//  location = "us-central1-a"
-//  remove_default_node_pool = true
-//  initial_node_count       = 1
-//
-//  network    = google_compute_network.vpc_network.name
-//  subnetwork = google_compute_subnetwork.vpc_subnet_1.name
-//}
-//
-//resource "google_container_node_pool" "node-pool-gke1" {
-//  name       = "node-pool-gke1"
-//  location   = "us-central1-a"
-//  cluster    = google_container_cluster.cluster-gke1.name
-//  node_count = 2
-//
-//  node_config {
-//    preemptible  = false
-//    machine_type = "e2-medium"
-//  }
-//}
+resource "google_container_cluster" "cluster-gke1" {
+  name     = "cluster-gke1"
+  location = "us-central1-a"
+  remove_default_node_pool = true
+  initial_node_count       = 1
+  workload_identity_config {
+    identity_namespace = "appinteroperability.svc.id.goog"
+  }
+
+  network    = google_compute_network.vpc_network.name
+  subnetwork = google_compute_subnetwork.vpc_subnet_1.name
+}
+
+resource "google_container_node_pool" "node-pool-gke1" {
+  name       = "node-pool-gke1"
+  location   = "us-central1-a"
+  cluster    = google_container_cluster.cluster-gke1.name
+  node_count = 2
+
+  node_config {
+    preemptible  = false
+    machine_type = "e2-medium"
+  }
+}
