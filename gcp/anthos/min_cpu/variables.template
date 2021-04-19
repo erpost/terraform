@@ -1,0 +1,14 @@
+# Populate Variables below and rename file to variables.tf
+
+variable "ssh_location" {
+
+  default = "<source IP for SSH access>>"
+}
+
+variable "region" {
+  default = "<region>"
+}
+
+variable "project" {
+  default = "<Project ID>"
+}
