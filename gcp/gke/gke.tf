@@ -1,10 +1,6 @@
-variable "ssh_location" {
-  type = string
-}
-
 provider "google" {
-  project = "appinteroperability"
-  region  = "us-central1"
+  project = var.project
+  region  = var.region
 }
 
 # Create VPC
@@ -62,7 +58,7 @@ resource "google_container_cluster" "cluster-gke1" {
   remove_default_node_pool = true
   initial_node_count       = 1
   workload_identity_config {
-    identity_namespace = "appinteroperability.svc.id.goog"
+    identity_namespace = "${var.project}.svc.id.goog"
   }
 
   network    = google_compute_network.vpc_network.name

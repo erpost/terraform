@@ -1,10 +1,6 @@
-variable "ssh_location" {
-  type = string
-}
-
 provider "google" {
-  project = "interop2"
-  region  = "us-central1"
+  project = var.project
+  region  = var.region
 }
 
 # Enable Compute Engine API
@@ -86,7 +82,7 @@ resource "google_project_service" "logging" {
 
 # Create Service Account
 resource "google_service_account" "baremetal-gcr" {
-  account_id   = "baremetal-gcr-id"
+  account_id   = "baremetal-gcr"
   display_name = "baremetal-gcr"
 }
 
@@ -167,8 +163,8 @@ resource "google_compute_subnetwork" "vpc_subnet_2" {
 }
 
 # Create Firewall Rule from Laptop
-resource "google_compute_firewall" "full-access" {
-  name     = "full-access"
+resource "google_compute_firewall" "anthos-full-access" {
+  name     = "anthos-full-access"
   network  = google_compute_network.vpc_network.name
   priority = 100
 
@@ -180,8 +176,8 @@ resource "google_compute_firewall" "full-access" {
 }
 
 # Create Firewall Rule for Internal VPC Traffic
-resource "google_compute_firewall" "internal-access" {
-  name     = "internal-access"
+resource "google_compute_firewall" "anthos-internal-access" {
+  name     = "anthos-internal-access"
   network  = google_compute_network.vpc_network.name
   priority = 200
 
@@ -195,7 +191,7 @@ resource "google_compute_firewall" "internal-access" {
 # Create Workstation Instance
 resource "google_compute_instance" "abm-ws" {
   name         = "abm-ws"
-  machine_type = "n1-standard-8"
+  machine_type = "n1-standard-2"
   zone         = "us-central1-a"
   can_ip_forward = true
   min_cpu_platform = "Intel Haswell"
