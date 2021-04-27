@@ -73,6 +73,6 @@ resource "google_container_node_pool" "node-pool-gke1" {
 
   node_config {
     preemptible  = false
-    machine_type = "e2-medium"
+    machine_type = "e2-standard-4"
   }
 }

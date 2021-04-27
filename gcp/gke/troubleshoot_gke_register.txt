@@ -1,7 +1,8 @@
-# Commands to register GKE with Anthos
+# Commands to register GKE with Anthos using CLI
 # Bug is being tracked: https://issuetracker.google.com/issues/184423917
 
 gcloud --project <project_id> container clusters list --uri
-gcloud --project <project_id> container hub memberships register <membership name (use cluster name)> \
---gke-uri=<uri of gke cluster> \
---service-account-key-file=<service account json key>
+
+gcloud beta container hub memberships register <membership name (use cluster name)> \
+ --gke-uri=<uri of gke cluster> \
+ --enable-workload-identity
